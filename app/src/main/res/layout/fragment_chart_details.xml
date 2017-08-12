@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.dreamteam.yamblz.tradecat.ChartDetailsFragment">
+    tools:context="com.dreamteam.yamblz.tradecat.ui.ChartDetailsFragment">
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graphView"
