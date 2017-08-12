@@ -1,6 +1,9 @@
 package com.dreamteam.yamblz.tradecat.data;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.dreamteam.yamblz.tradecat.data.exception.CatDeadException;
 import com.dreamteam.yamblz.tradecat.data.exception.NotEnoughMoneyException;
 
@@ -126,6 +129,10 @@ public class DataService {
         return localInstance;
     }
 
+    public synchronized static void removeInstance() {
+        dataService = null;
+    }
+
     public Statistics getStatistics() {
         long current = Instant.now().getEpochSecond();
         long fromStart = current - startTimeStamp;
@@ -151,7 +158,7 @@ public class DataService {
         }
 
         public Observable<Integer> getLifeCount() {
-            return getLifeCount.map(fullness -> ((int)(fullness + ONE_LIFE_FULLNESS) / ONE_LIFE_FULLNESS));
+            return getLifeCount.map(fullness -> ((int)(fullness + ONE_LIFE_FULLNESS) % ONE_LIFE_FULLNESS));
         }
 
         public synchronized void addFullness(double value) {
@@ -170,6 +177,7 @@ public class DataService {
     static class CoinHolder {
 
         private final double D;
+        private final double lambda;
         private final Random random = new Random();
         private final CoinType coinType;
         private final Observable<Double> getCosts;
@@ -185,6 +193,7 @@ public class DataService {
             this.coinType = coinType;
             this.cost = coinType.initCost;
             this.D = cost / 100.0;
+            this.lambda = 5;
             this.getCosts = Observable.interval(1, TimeUnit.SECONDS)
                 .map(time -> onNextRandomChange());
         }
@@ -215,13 +224,27 @@ public class DataService {
             return currentCash - count * cost;
         }
 
+        private int getPoisson(double lambda) {
+            double L = Math.exp(-lambda);
+            double p = 1.0;
+            int k = 0;
+
+            do {
+                k++;
+                p *= random.nextDouble();
+            } while (p > L);
+
+            return k;
+        }
+
         private synchronized double onNextRandomChange() {
             currentDelta = random.nextGaussian();
-            double newCost = cost + currentDelta * D;
+            double newCost = cost + currentDelta * D * getPoisson(lambda);
             if (newCost < 0) {
                 currentDelta *= -0.1;
                 newCost = cost + currentDelta * D;
             }
+
             cost = newCost;
             return cost;
         }
@@ -232,10 +255,24 @@ public class DataService {
     public enum CatPride {
 
         HARD(40),
-        MEDIUM(200),
+        MEDIUM(20),
         EASY(10);
 
         private double appetite;
+        public static final int COUNT = 3;
+
+        public String getName() {
+            switch (this) {
+                case HARD:
+                    return "Hard";
+                case MEDIUM:
+                    return "Medium";
+                case EASY:
+                    return "Easy";
+                default:
+                    return "";
+            }
+        }
 
         CatPride(double appetite) {
             this.appetite = appetite;
@@ -255,6 +292,8 @@ public class DataService {
         RUR(1),
         GPY(10);
 
+        public final static int COUNT = 9;
+
         private final double initCost;
 
         CoinType(double initCost) {
@@ -263,6 +302,31 @@ public class DataService {
 
         public double getInitCost() {
             return initCost;
+        }
+
+        public String getName() {
+            switch (this) {
+                case BTC:
+                    return "BTC";
+                case ETH:
+                    return "ETH";
+                case ETC:
+                    return "ETC";
+                case LTC:
+                    return "LTC";
+                case Gold:
+                    return "Gold";
+                case Gasoline:
+                    return "Gasoline";
+                case USD:
+                    return "USD";
+                case RUR:
+                    return "RUR";
+                case GPY:
+                    return "GPY";
+                default:
+                    return "";
+            }
         }
 
     }
