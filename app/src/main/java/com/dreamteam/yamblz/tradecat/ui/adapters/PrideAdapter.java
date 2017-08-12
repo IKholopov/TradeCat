@@ -61,16 +61,16 @@ public class PrideAdapter extends RecyclerView.Adapter<PrideAdapter.TagWithSelec
         return DataService.CatPride.values().length;
     }
 
-    public DataService.CatPride[] checkedTypes() {
-        DataService.CatPride[] coinTypes = new DataService.CatPride[1];
+    public CatPride checkedTypes() {
+        DataService.CatPride coinType = null;
         int size = 0;
-        for (Pair<CatPride, Boolean> coinType : coins) {
-            if (coinType.second) {
-                coinTypes[size] = coinType.first;
+        for (Pair<CatPride, Boolean> coinTypes : coins) {
+            if (coinTypes.second) {
+                coinType = coinTypes.first;
                 size++;
             }
         }
-        return coinTypes;
+        return coinType;
     }
 
     // -------------------------------------- inner types -------------------------------------------
