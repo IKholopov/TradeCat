@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 
 import com.dreamteam.yamblz.tradecat.ui.adapters.CoinsAdapter;
+import com.dreamteam.yamblz.tradecat.ui.adapters.PrideAdapter;
 import com.dreamteam.yamblz.tradecat.ui.graphlist.GraphListFragment;
 import com.dreamteam.yamblz.tradecat.data.DataService;
 
@@ -26,5 +27,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.bind(this);
         coinsRecycler.setAdapter(new CoinsAdapter());
+        prideRecycler.setAdapter(new PrideAdapter());
     }
 }
