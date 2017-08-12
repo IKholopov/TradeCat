@@ -1,5 +1,6 @@
 package com.dreamteam.yamblz.tradecat.ui.profile;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +14,7 @@ import android.widget.RatingBar;
 import com.dreamteam.yamblz.tradecat.App;
 import com.dreamteam.yamblz.tradecat.R;
 import com.dreamteam.yamblz.tradecat.data.DataService;
+import com.dreamteam.yamblz.tradecat.ui.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,6 +66,6 @@ public class ProfileFragment extends Fragment {
         Completable.fromAction(() -> App.getDb().dao().insert(DataService.getInstance().getStatistics()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
+                .subscribe(() -> startActivity(new Intent(getContext(), MainActivity.class)));
     }
 }
