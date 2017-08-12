@@ -1,6 +1,7 @@
 package com.dreamteam.yamblz.tradecat.ui.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -12,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by igor on 8/12/17.
  */
 
-public class PrideAdapter extends RecyclerView.Adapter<PrideAdapter.ViewHoder> {
+public class PrideAdapter extends RecyclerView.Adapter<PrideAdapter.ViewHolder> {
 
     private List<CatPride> prides;
 
@@ -29,13 +31,15 @@ public class PrideAdapter extends RecyclerView.Adapter<PrideAdapter.ViewHoder> {
     }
 
     @Override
-    public ViewHoder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_pride_view,
+                parent, false);;
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHoder holder, int position) {
-
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.prideName.setText(prides.get(position).getName());
     }
 
     @Override
@@ -43,13 +47,13 @@ public class PrideAdapter extends RecyclerView.Adapter<PrideAdapter.ViewHoder> {
         return CatPride.COUNT;
     }
 
-    static class ViewHoder extends RecyclerView.ViewHolder {
+    static class ViewHolder extends RecyclerView.ViewHolder {
         
         @BindView(R.id.prideName) TextView prideName;
 
-        public ViewHoder(View itemView) {
+        public ViewHolder(View itemView) {
             super(itemView);
-
+            ButterKnife.bind(this, itemView);
         }
     }
 }
