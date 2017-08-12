@@ -1,5 +1,6 @@
 package com.dreamteam.yamblz.tradecat.ui.graphlist;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,13 +29,27 @@ public class GraphListFragment extends Fragment {
     private Observable<Double> RURemitter;
 
     private final static int MAX_ENTRIES = 50;
+    private OnGraphClick onGraphClick;
+
+    private DataService.CoinType[] coins;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        onGraphClick = (OnGraphClick) activity;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_graph_list, container, false);
+        setUpGraphs(rootView);
+        return rootView;
+    }
 
+    private void setUpGraphs(View rootView) {
         GraphView graph = rootView.findViewById(R.id.graph);
+        graph.setOnClickListener(view -> onGraphClick.onGraphClick(DataService.CoinType.BTC));
         mSeries1 = new LineGraphSeries<>();
         graph.addSeries(mSeries1);
         graph.getViewport().setScalable(true);
@@ -44,6 +59,7 @@ public class GraphListFragment extends Fragment {
         graph.getViewport().setMaxX(40);
 
         GraphView graph2 = rootView.findViewById(R.id.graph2);
+        graph2.setOnClickListener(view -> onGraphClick.onGraphClick(DataService.CoinType.USD));
         mSeries2 = new LineGraphSeries<>();
         graph2.addSeries(mSeries2);
         graph2.getViewport().setXAxisBoundsManual(true);
@@ -53,6 +69,7 @@ public class GraphListFragment extends Fragment {
         graph2.getViewport().setMaxX(40);
 
         GraphView graph3 = rootView.findViewById(R.id.graph3);
+        graph3.setOnClickListener(view -> onGraphClick.onGraphClick(DataService.CoinType.RUR));
         mSeries3 = new LineGraphSeries<>();
         graph3.addSeries(mSeries3);
         graph3.getViewport().setXAxisBoundsManual(true);
@@ -62,81 +79,29 @@ public class GraphListFragment extends Fragment {
         graph3.getViewport().setMaxX(40);
 
         dataService = DataService.getInstance();
-        dataService.init(new DataService.CoinType[] {DataService.CoinType.BTC,
-                DataService.CoinType.USD, DataService.CoinType.RUR}, DataService.CatPride.MEDIUM);
-        BTCemitter = dataService.getCoinTypeObservable(DataService.CoinType.BTC);
-        USDemitter = dataService.getCoinTypeObservable(DataService.CoinType.USD);
-        RURemitter = dataService.getCoinTypeObservable(DataService.CoinType.RUR);
+        DataService.CoinType[] coinTypes = dataService.getCurrentTypes();
+        BTCemitter = dataService.getCoinTypeObservable(coinTypes[0]);
+        USDemitter = dataService.getCoinTypeObservable(coinTypes[1]);
+        RURemitter = dataService.getCoinTypeObservable(coinTypes[2]);
         BTCemitter.subscribe(aDouble -> {
-            mSeries1.appendData(new DataPoint(mSeries1.getHighestValueX() + 1, aDouble), true, 40);
+            mSeries1.appendData(new DataPoint(
+                    mSeries1.getHighestValueX() + 1, aDouble), true, MAX_ENTRIES);
         });
         USDemitter.subscribe(aDouble -> {
-            mSeries2.appendData(new DataPoint(mSeries2.getHighestValueX() + 1, aDouble), true, 40);
+            mSeries2.appendData(new DataPoint(
+                    mSeries2.getHighestValueX() + 1, aDouble), true, MAX_ENTRIES);
         });
         RURemitter.subscribe(aDouble -> {
-            mSeries3.appendData(new DataPoint(mSeries3.getHighestValueX() + 1, aDouble), true, 40);
+            mSeries3.appendData(new DataPoint(
+                    mSeries3.getHighestValueX() + 1, aDouble), true, MAX_ENTRIES);
         });
-        return rootView;
     }
 
+    private void setUpButtons(View rootView) {
+        
+    }
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        mTimer1 = new Runnable() {
-//            @Override
-//            public void run() {
-//                mSeries1.resetData(generateData());
-//                mHandler.postDelayed(this, 300);
-//            }
-//        };
-//        mHandler.postDelayed(mTimer1, 300);
-//
-//        mTimer2 = new Runnable() {
-//            @Override
-//            public void run() {
-//                graph2LastXValue += 1d;
-//                mSeries2.appendData(new DataPoint( graph2LastXValue, getRandom()), true, 40);
-//                mHandler.postDelayed(this, 200);
-//            }
-//        };
-//        mHandler.postDelayed(mTimer2, 1000);
-//
-//        mTimer3 = new Runnable() {
-//            @Override
-//            public void run() {
-//                graph2LastXValue += 1d;
-//                mSeries3.appendData(new DataPoint( graph2LastXValue, getRandom()), true, 40);
-//                mHandler.postDelayed(this, 200);
-//            }
-//        };
-//        mHandler.postDelayed(mTimer3, 1000);
-//    }
-//
-//    @Override
-//    public void onPause() {
-//        mHandler.removeCallbacks(mTimer1);
-//        mHandler.removeCallbacks(mTimer2);
-//        mHandler.removeCallbacks(mTimer3);
-//        super.onPause();
-//    }
-//
-//    private DataPoint[] generateData() {
-//        int count = 30;
-//        DataPoint[] values = new DataPoint[count];
-//        for (int i=0; i<count; i++) {
-//            double x = i;
-//            double f = mRand.nextDouble()*0.15+0.3;
-//            double y = Math.sin(i*f+2) + mRand.nextDouble()*0.3;
-//            DataPoint v = new DataPoint(x, y);
-//            values[i] = v;
-//        }
-//        return values;
-//    }
-//
-//    double mLastRandom = 2;
-//    Random mRand = new Random();
-//    private double getRandom() {
-//        return mLastRandom += mRand.nextDouble()*0.5 - 0.25;
-//    }
+    public interface OnGraphClick {
+        void onGraphClick(DataService.CoinType coinType);
+    }
 }

@@ -1,6 +1,9 @@
 package com.dreamteam.yamblz.tradecat.data;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.dreamteam.yamblz.tradecat.data.exception.CatDeadException;
 import com.dreamteam.yamblz.tradecat.data.exception.NotEnoughMoneyException;
 
@@ -118,6 +121,10 @@ public class DataService {
             }
         }
         return localInstance;
+    }
+
+    public synchronized static void removeInstance() {
+        dataService = null;
     }
 
     // -------------------------------------- inner types -----------------------------------------
