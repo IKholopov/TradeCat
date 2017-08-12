@@ -257,6 +257,8 @@ public class DataService {
                     return "Medium";
                 case EASY:
                     return "Easy";
+                default:
+                    return "";
             }
         }
 
