@@ -1,6 +1,7 @@
 package com.dreamteam.yamblz.tradecat.data;
 
 
+import com.dreamteam.yamblz.tradecat.data.exception.CatDeadException;
 import com.dreamteam.yamblz.tradecat.data.exception.NotEnoughMoneyException;
 
 import java.util.Random;
@@ -18,33 +19,33 @@ public class DataService {
     private double currentCash = INIT_CASH;
     private boolean isInitialized = false;
     private CoinHolder[] coinHolders = null;
-
+    private Cat cat = null;
 
     private DataService() {
 
     }
 
-    public synchronized void initWithCoins(CoinType[] coinTypes) {
+    public synchronized void init(CoinType[] coinTypes, CatPride catPride) {
         if (isInitialized) {
             throw new IllegalStateException("DataService has already been initialized");
-        } else if (coinTypes == null || coinTypes.length != COINS_COUNT) {
-            throw new IllegalStateException("Coin types count must be " + COINS_COUNT);
+        } else if (coinTypes == null || catPride == null || coinTypes.length != COINS_COUNT) {
+            throw new IllegalStateException("Coin types and cat pride count must be " + COINS_COUNT);
         } else {
             isInitialized = true;
             coinHolders = new CoinHolder[COINS_COUNT];
             for (int i = 0; i < coinTypes.length; ++i) {
                 coinHolders[i] = new CoinHolder(coinTypes[i]);
             }
+            cat = new Cat(catPride);
         }
     }
 
     public synchronized Observable<Double> getCoinTypeObservable(CoinType coinType) {
-       return getCoinHolder(coinType).getValues();
+        return getCoinHolder(coinType).getCosts();
     }
 
     public synchronized CoinType[] getCurrentTypes() {
-        if (!isInitialized)
-            throw new IllegalStateException("DataService must be initialized before get");
+        assetInitialized();
 
         CoinType[] result = new CoinType[COINS_COUNT];
         for (int i = 0; i < COINS_COUNT; ++i) {
@@ -54,8 +55,14 @@ public class DataService {
         return result;
     }
 
-    public synchronized void incrementCoin(CoinType coinType, int count) throws NotEnoughMoneyException{
+    public synchronized void incrementCoin(CoinType coinType, int count) throws NotEnoughMoneyException {
+        double previousCash = currentCash;
         currentCash = getCoinHolder(coinType).incrementAndReturnCurrentCash(currentCash, count);
+
+        double difference = currentCash - previousCash;
+        if (difference > 0) {
+            getCat().addFullness(currentCash - previousCash);
+        }
     }
 
     public synchronized void decrementCoin(CoinType coinType, int count) throws NotEnoughMoneyException {
@@ -63,19 +70,34 @@ public class DataService {
     }
 
     public synchronized int getCoinCount(CoinType coinType) {
-        if (!isInitialized) throw new IllegalStateException("DataService must be initialized before get");
+        assetInitialized();
         return getCoinHolder(coinType).getCount();
+    }
+
+    public synchronized double getCurrentCash() {
+        assetInitialized();
+        return currentCash;
     }
 
     // ----------------------------------------- private ------------------------------------------
 
     private CoinHolder getCoinHolder(CoinType coinType) {
+        assetInitialized();
         for (CoinHolder coinHolder : coinHolders) {
             if (coinHolder.getCoinType() == coinType) {
                 return coinHolder;
             }
         }
         throw new IllegalStateException("CoinType is not in current values");
+    }
+
+    private Cat getCat() {
+        if (cat == null) throw new IllegalStateException("Cat must be non null when getting");
+        return cat;
+    }
+
+    private void assetInitialized() {
+        if (!isInitialized) throw new IllegalStateException("DataService must be initialized before get");
     }
 
     // ------------------------------------------ static ------------------------------------------
@@ -95,15 +117,47 @@ public class DataService {
 
     // -------------------------------------- inner types -----------------------------------------
 
+    static class Cat {
+
+        private static final double INIT_FULLNESS = 1000.0;
+
+        private final CatPride catPride;
+        private final Observable<Double> getFullness;
+        private double fullness = INIT_FULLNESS;
+
+        public Cat(CatPride catPride) {
+            this.catPride = catPride;
+            this.getFullness = Observable.interval(10, TimeUnit.SECONDS)
+                .map(time -> onNextEat());
+        }
+
+        public Observable<Double> getFullness() {
+            return getFullness;
+        }
+
+        public synchronized void addFullness(double value) {
+            fullness += value;
+        }
+
+        public synchronized double onNextEat() throws CatDeadException {
+            double newFullness = fullness - catPride.appetite;
+            if (newFullness < 0) throw new CatDeadException();
+            fullness = newFullness;
+            return fullness;
+        }
+
+    }
+
     static class CoinHolder {
 
         private final double D;
+        private final Random random = new Random();
+        private final CoinType coinType;
+        private final Observable<Double> getCosts;
 
         private int count;
         private double currentDelta;
-        private Random random = new Random();
         private double cost;
-        private CoinType coinType;
 
         CoinHolder(CoinType coinType) {
             Preconditions.nonNull(coinType);
@@ -111,7 +165,9 @@ public class DataService {
             this.currentDelta = 0;
             this.coinType = coinType;
             this.cost = coinType.initCost;
-            this.D = cost / 10.0;
+            this.D = cost / 100.0;
+            this.getCosts = Observable.interval(1, TimeUnit.SECONDS)
+                .map(time -> onNextRandomChange());
         }
 
         int getCount() {
@@ -122,9 +178,8 @@ public class DataService {
             return coinType;
         }
 
-        Observable<Double> getValues() {
-            return Observable.interval(1, TimeUnit.SECONDS)
-                .map(time -> onNextRandomChange());
+        Observable<Double> getCosts() {
+            return getCosts;
         }
 
         private synchronized double decrementAndReturnCurrentCash(double currentCash, int count) throws NotEnoughMoneyException {
@@ -143,8 +198,28 @@ public class DataService {
 
         private synchronized double onNextRandomChange() {
             currentDelta += random.nextGaussian();
-            cost += currentDelta * D;
+            double newCost = cost + currentDelta * D;
+            if (newCost < 0) {
+                currentDelta *= -0.1;
+                newCost = cost + currentDelta * D;
+            }
+            cost = newCost;
             return cost;
+        }
+
+    }
+
+
+    public enum CatPride {
+
+        HARD(40),
+        MEDIUM(20),
+        EASY(10);
+
+        private double appetite;
+
+        CatPride(double appetite) {
+            this.appetite = appetite;
         }
 
     }
