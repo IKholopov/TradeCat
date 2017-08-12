@@ -1,9 +1,11 @@
-package com.dreamteam.yamblz.tradecat;
+package com.dreamteam.yamblz.tradecat.ui;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.dreamteam.yamblz.tradecat.ui.GraphListFragment;
+
+import com.dreamteam.yamblz.tradecat.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,4 +27,6 @@ public class MainActivity extends AppCompatActivity {
                 .addToBackStack(null)
                 .commitAllowingStateLoss();
     }
+
+
 }
