@@ -23,8 +23,6 @@ public class GameActivity extends AppCompatActivity implements GraphListFragment
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DataService.CoinType[] coins = {DataService.CoinType.BTC, DataService.CoinType.ETH, DataService.CoinType.Gold};
-        DataService.getInstance().init(coins, DataService.CatPride.HARD);
         setContentView(R.layout.activity_game);
         if (getSupportFragmentManager().findFragmentByTag(GraphListFragment.TAG) == null) {
             navigateToGraphList();
