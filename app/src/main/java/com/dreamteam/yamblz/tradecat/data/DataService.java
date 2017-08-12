@@ -44,6 +44,11 @@ public class DataService {
         return getCoinHolder(coinType).getCosts();
     }
 
+    public synchronized Observable<Integer> getCatLifecycleObservable() {
+        assetInitialized();
+        return getCat().getLifeCount();
+    }
+
     public synchronized CoinType[] getCurrentTypes() {
         assetInitialized();
 
@@ -120,19 +125,21 @@ public class DataService {
     static class Cat {
 
         private static final double INIT_FULLNESS = 1000.0;
+        private static final int LIFE_COUNT = 5;
+        private static final int ONE_LIFE_FULLNESS = (int)INIT_FULLNESS / LIFE_COUNT;
 
         private final CatPride catPride;
-        private final Observable<Double> getFullness;
+        private final Observable<Double> getLifeCount;
         private double fullness = INIT_FULLNESS;
 
         public Cat(CatPride catPride) {
             this.catPride = catPride;
-            this.getFullness = Observable.interval(10, TimeUnit.SECONDS)
+            this.getLifeCount = Observable.interval(10, TimeUnit.SECONDS)
                 .map(time -> onNextEat());
         }
 
-        public Observable<Double> getFullness() {
-            return getFullness;
+        public Observable<Integer> getLifeCount() {
+            return getLifeCount.map(fullness -> ((int)(fullness + ONE_LIFE_FULLNESS) % ONE_LIFE_FULLNESS));
         }
 
         public synchronized void addFullness(double value) {
@@ -197,7 +204,7 @@ public class DataService {
         }
 
         private synchronized double onNextRandomChange() {
-            currentDelta += random.nextGaussian();
+            currentDelta = random.nextGaussian();
             double newCost = cost + currentDelta * D;
             if (newCost < 0) {
                 currentDelta *= -0.1;
