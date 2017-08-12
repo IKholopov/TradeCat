@@ -26,13 +26,22 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/coin_first"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"/>
+
+            <TextView
                 android:id="@+id/count_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="0"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:layout_below="@+id/coin_first"/>
 
             <ImageView
                 android:id="@+id/arrow_up"
@@ -73,13 +82,23 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/coin_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"/>
+
+
+            <TextView
                 android:id="@+id/count2_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="0"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:layout_below="@+id/coin_second"/>
 
             <ImageView
                 android:id="@+id/arrow_up2"
@@ -121,13 +140,22 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/coin_third"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:layout_centerHorizontal="true"
+                android:textColor="@android:color/black"/>
+
+            <TextView
                 android:id="@+id/count3_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:text="0"
                 android:textColor="@android:color/black"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:layout_below="@+id/coin_third"/>
 
             <ImageView
                 android:id="@+id/arrow_up3"
