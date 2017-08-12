@@ -1,7 +1,6 @@
 package com.dreamteam.yamblz.tradecat.ui.graphlist;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,21 +18,16 @@ public class GraphListFragment extends Fragment {
 
     public static final String TAG = "graph_list_tag";
 
-    private final Handler mHandler = new Handler();
-    private Runnable mTimer1;
-    private Runnable mTimer2;
-    private Runnable mTimer3;
     private LineGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
     private LineGraphSeries<DataPoint> mSeries3;
-    private double graph1LastXValue = 5d;
-    private double graph2LastXValue = 5d;
-    private double graph3LastXValue = 5d;
 
     private DataService dataService;
     private Observable<Double> BTCemitter;
     private Observable<Double> USDemitter;
     private Observable<Double> RURemitter;
+
+    private final static int MAX_ENTRIES = 50;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,6 +37,8 @@ public class GraphListFragment extends Fragment {
         GraphView graph = rootView.findViewById(R.id.graph);
         mSeries1 = new LineGraphSeries<>();
         graph.addSeries(mSeries1);
+        graph.getViewport().setScalable(true);
+        graph.getViewport().setScrollable(false);
         graph.getViewport().setXAxisBoundsManual(true);
         graph.getViewport().setMinX(0);
         graph.getViewport().setMaxX(40);
@@ -51,6 +47,8 @@ public class GraphListFragment extends Fragment {
         mSeries2 = new LineGraphSeries<>();
         graph2.addSeries(mSeries2);
         graph2.getViewport().setXAxisBoundsManual(true);
+        graph2.getViewport().setScalable(true);
+        graph2.getViewport().setScrollable(false);
         graph2.getViewport().setMinX(0);
         graph2.getViewport().setMaxX(40);
 
@@ -58,26 +56,25 @@ public class GraphListFragment extends Fragment {
         mSeries3 = new LineGraphSeries<>();
         graph3.addSeries(mSeries3);
         graph3.getViewport().setXAxisBoundsManual(true);
+        graph3.getViewport().setScalable(true);
+        graph3.getViewport().setScrollable(false);
         graph3.getViewport().setMinX(0);
         graph3.getViewport().setMaxX(40);
 
         dataService = DataService.getInstance();
-        dataService.initWithCoins(new DataService.CoinType[] {DataService.CoinType.BTC,
-                DataService.CoinType.USD, DataService.CoinType.RUR});
+        dataService.init(new DataService.CoinType[] {DataService.CoinType.BTC,
+                DataService.CoinType.USD, DataService.CoinType.RUR}, DataService.CatPride.MEDIUM);
         BTCemitter = dataService.getCoinTypeObservable(DataService.CoinType.BTC);
         USDemitter = dataService.getCoinTypeObservable(DataService.CoinType.USD);
         RURemitter = dataService.getCoinTypeObservable(DataService.CoinType.RUR);
         BTCemitter.subscribe(aDouble -> {
-            graph1LastXValue++;
-            mSeries1.appendData(new DataPoint(graph1LastXValue, aDouble), true, 40);
+            mSeries1.appendData(new DataPoint(mSeries1.getHighestValueX() + 1, aDouble), true, 40);
         });
         USDemitter.subscribe(aDouble -> {
-            graph2LastXValue++;
-            mSeries2.appendData(new DataPoint(graph2LastXValue, aDouble), true, 40);
+            mSeries2.appendData(new DataPoint(mSeries2.getHighestValueX() + 1, aDouble), true, 40);
         });
         RURemitter.subscribe(aDouble -> {
-            graph3LastXValue++;
-            mSeries3.appendData(new DataPoint(graph3LastXValue, aDouble), true, 40);
+            mSeries3.appendData(new DataPoint(mSeries3.getHighestValueX() + 1, aDouble), true, 40);
         });
         return rootView;
     }
