@@ -19,6 +19,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -27,6 +28,7 @@ import io.reactivex.disposables.CompositeDisposable;
  *
  */
 public class ChartDetailsFragment extends Fragment {
+    public static final String TAG = "ChartDetailsFragment";
 
     private final static int MAX_ENTRIES = 12;
 
@@ -39,8 +41,10 @@ public class ChartDetailsFragment extends Fragment {
 
     private Observable<Double> priceEmitter;
     private CompositeDisposable disposable = new CompositeDisposable();
+    private Unbinder unbind;
 
     private LineGraphSeries<DataPoint> series;
+    private double graph2LastXValue = 100d;
 
     public ChartDetailsFragment() {
         // Required empty public constructor
@@ -58,15 +62,16 @@ public class ChartDetailsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_chart_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_chart_details, container, false);
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedState) {
-        ButterKnife.bind(this, view);
+        unbind = ButterKnife.bind(this, view);
         graph.addSeries(series);
         disposable.add(priceEmitter.subscribe(newValue -> {
-            series.appendData(new DataPoint(series.getHighestValueX() + 1, newValue), true, 12);
+            series.appendData(new DataPoint(series.getHighestValueX() + 1, newValue), true, 100);
         }));
         updateTextViews();
         sellButton.setOnClickListener(button -> sell());
@@ -76,6 +81,7 @@ public class ChartDetailsFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         disposable.dispose();
+        unbind.unbind();
     }
 
     private void sell() {
