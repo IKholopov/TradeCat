@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/containerPager"
+                android:layout_width="match_parent"
+                android:background="@android:color/white"
+                android:layout_height="match_parent"
+                app:behavior_peekHeight="116dp"
+                android:elevation="8dp"
+                app:layout_behavior="@string/bottom_sheet_behavior"
+                tools:showIn="@layout/activity_main">
+
+    <ImageView
+        android:id="@+id/ivHeart0"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_heart"/>
+
+    <ImageView
+        android:id="@+id/ivHeart1"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivHeart2"
+        android:src="@drawable/ic_heart"/>
+
+    <ImageView
+        android:id="@+id/ivHeart2"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/ivHeart0"
+        android:src="@drawable/ic_heart"/>
+
+    <ImageView
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_margin="16dp"
+        android:src="@mipmap/ic_launcher"
+        android:id="@+id/ivAvatar"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"/>
+</RelativeLayout>

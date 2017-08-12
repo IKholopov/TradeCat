@@ -16,6 +16,8 @@ import java.util.Random;
 
 public class GraphListFragment extends Fragment {
 
+    public static final String TAG = "graph_list_tag";
+
     private final Handler mHandler = new Handler();
     private Runnable mTimer1;
     private Runnable mTimer2;
