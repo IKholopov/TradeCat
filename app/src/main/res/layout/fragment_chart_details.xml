@@ -1,72 +1,72 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.dreamteam.yamblz.tradecat.ui.ChartDetailsFragment">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              tools:context="com.dreamteam.yamblz.tradecat.ui.ChartDetailsFragment">
 
     <com.jjoe64.graphview.GraphView
         android:id="@+id/graphView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="2"
+        android:layout_weight="1"
         android:paddingLeft="16dp"
         android:paddingStart="16dp"/>
 
-    <LinearLayout
-        android:orientation="horizontal"
+    <TextView
+        android:id="@+id/currentCoin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <TextView
-            android:id="@+id/currentCoinLabel"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"/>
-        <TextView
-            android:id="@+id/currentCoin"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:textAlignment="center"
+        android:textColor="@android:color/black"
+        android:textSize="20sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/buyCoin"
+            android:layout_width="@dimen/trade_button_size"
+            android:layout_height="@dimen/trade_button_size"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_arrow_up"/>
+
+        <EditText
+            android:id="@+id/amountToTrade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="number"/>
+
+        <Button
+            android:id="@+id/sellCoin"
+            android:layout_width="@dimen/trade_button_size"
+            android:layout_height="@dimen/trade_button_size"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_arrow_down"/>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
-        <Button
-            android:id="@+id/buyCoin"
-            android:background="@drawable/ic_arrow_up"
-            android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/trade_button_size"
-            android:layout_height="@dimen/trade_button_size" />
-        <EditText
-            android:id="@+id/amountToTrade"
-            android:inputType="number"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-        <Button
-            android:id="@+id/sellCoin"
-            android:background="@drawable/ic_arrow_down"
-            android:layout_gravity="center_vertical"
-            android:layout_width="@dimen/trade_button_size"
-            android:layout_height="@dimen/trade_button_size" />
-    </LinearLayout>
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
         <TextView
-            android:text="@string/money_symbol"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"/>
+
         <TextView
             android:id="@+id/currentMoney"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
 </LinearLayout>
