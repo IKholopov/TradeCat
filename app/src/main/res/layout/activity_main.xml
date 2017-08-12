@@ -11,6 +11,6 @@
         android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="@dimen/bottomShiftHeight">
+        android:paddingBottom="@dimen/bottomShiftHeight">
     </FrameLayout>
 </android.support.design.widget.CoordinatorLayout>
