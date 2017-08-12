@@ -10,3 +10,4 @@ keystore.properties
 .externalNativeBuild
 .gitignore
 *IgorStore.jks
+/app/build/

@@ -126,15 +126,15 @@ public class GraphListFragment extends Fragment {
         });
         (rootView.findViewById(R.id.arrow_down2)).setOnClickListener(view -> {
             decrementAndHAndleException(coinTypes[1]);
-            count2.setText(dataService.getCoinCount(coinTypes[1]));
+            count2.setText(dataService.getCoinCount(coinTypes[1]) + "");
         });
         (rootView.findViewById(R.id.arrow_up3)).setOnClickListener(view -> {
             incrementAndHAndleException(coinTypes[2]);
-            count3.setText(dataService.getCoinCount(coinTypes[2]));
+            count3.setText(dataService.getCoinCount(coinTypes[2]) + "");
         });
         (rootView.findViewById(R.id.arrow_down3)).setOnClickListener(view -> {
             decrementAndHAndleException(coinTypes[2]);
-            count3.setText(dataService.getCoinCount(coinTypes[2]));
+            count3.setText(dataService.getCoinCount(coinTypes[2]) + "");
         });
     }
 
