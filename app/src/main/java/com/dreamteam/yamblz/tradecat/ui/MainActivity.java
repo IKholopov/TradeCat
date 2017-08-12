@@ -2,7 +2,6 @@ package com.dreamteam.yamblz.tradecat.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +12,8 @@ import com.dreamteam.yamblz.tradecat.ui.adapters.CoinsAdapter;
 import com.dreamteam.yamblz.tradecat.ui.adapters.PrideAdapter;
 import com.dreamteam.yamblz.tradecat.ui.graphlist.GraphListFragment;
 import com.dreamteam.yamblz.tradecat.data.DataService;
+import com.dreamteam.yamblz.tradecat.data.DataService.CoinType;
+import com.dreamteam.yamblz.tradecat.data.DataService.CatPride;
 
 import com.dreamteam.yamblz.tradecat.R;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         coinsRecycler.setAdapter(new CoinsAdapter());
         coinsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
