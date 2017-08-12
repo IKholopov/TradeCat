@@ -204,7 +204,7 @@ public class DataService {
         }
 
         private synchronized double onNextRandomChange() {
-            currentDelta += random.nextGaussian();
+            currentDelta = random.nextGaussian();
             double newCost = cost + currentDelta * D;
             if (newCost < 0) {
                 currentDelta *= -0.1;
