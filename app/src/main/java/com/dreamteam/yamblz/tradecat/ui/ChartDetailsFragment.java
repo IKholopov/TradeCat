@@ -97,6 +97,12 @@ public class ChartDetailsFragment extends Fragment {
         unbind.unbind();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        getActivity().setTitle(coinType.getName());
+    }
+
     private void sell() {
         try {
             int toSell = Integer.valueOf(amountToTrade.getText().toString());
