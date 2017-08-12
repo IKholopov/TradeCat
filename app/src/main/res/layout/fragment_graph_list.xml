@@ -39,7 +39,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_up"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/count_textview"/>
+                android:layout_below="@+id/count_textview"
+                android:background="@drawable/transparent_selector"/>
 
             <ImageView
                 android:id="@+id/arrow_down"
@@ -47,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/arrow_up"/>
+                android:layout_below="@+id/arrow_up"
+                android:background="@drawable/transparent_selector"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -85,7 +87,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_up"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/count2_textview"/>
+                android:layout_below="@+id/count2_textview"
+                android:background="@drawable/transparent_selector"/>
 
             <ImageView
                 android:id="@+id/arrow_down2"
@@ -93,7 +96,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/arrow_up2"/>
+                android:layout_below="@+id/arrow_up2"
+                android:background="@drawable/transparent_selector"/>
         </RelativeLayout>
 
     </LinearLayout>
@@ -131,7 +135,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_up"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/count3_textview"/>
+                android:layout_below="@+id/count3_textview"
+                android:background="@drawable/transparent_selector"/>
 
             <ImageView
                 android:id="@+id/arrow_down3"
@@ -139,7 +144,8 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_arrow_down"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/arrow_up3"/>
+                android:layout_below="@+id/arrow_up3"
+                android:background="@drawable/transparent_selector"/>
         </RelativeLayout>
 
     </LinearLayout>
