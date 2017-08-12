@@ -133,7 +133,7 @@ public class ChartDetailsFragment extends Fragment {
 
     private void updateTextViews() {
         currentCoinView.setText(String.valueOf(DataService.getInstance().getCoinCount(coinType)));
-        currentMoneyView.setText(String.valueOf(DataService.getInstance().getCurrentCash()));
+        currentMoneyView.setText(String.valueOf(Math.round(DataService.getInstance().getCurrentCash())));
         amountToTrade.setText(String.valueOf(0));
     }
 
