@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 xmlns:app="http://schemas.android.com/apk/res-auto"
                                                  xmlns:tools="http://schemas.android.com/tools"
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  tools:context="com.dreamteam.yamblz.tradecat.MainActivity">
 
-    <include layout="@layout/fragment_profile"/>
+    <FrameLayout
+        android:id="@+id/container_bottom_sheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white"
+        android:elevation="16dp"
+        app:behavior_peekHeight="116dp"
+        app:layout_behavior="@string/bottom_sheet_behavior"/>
 
     <FrameLayout
         android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"/>
 </android.support.design.widget.CoordinatorLayout>

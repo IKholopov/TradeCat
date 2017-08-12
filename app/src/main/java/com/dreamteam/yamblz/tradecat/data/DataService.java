@@ -4,6 +4,8 @@ package com.dreamteam.yamblz.tradecat.data;
 import com.dreamteam.yamblz.tradecat.data.exception.CatDeadException;
 import com.dreamteam.yamblz.tradecat.data.exception.NotEnoughMoneyException;
 
+import org.threeten.bp.Instant;
+
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +22,8 @@ public class DataService {
     private boolean isInitialized = false;
     private CoinHolder[] coinHolders = null;
     private Cat cat = null;
+    private double maxCash;
+    private long startTimeStamp;
 
     private DataService() {
 
@@ -31,6 +35,7 @@ public class DataService {
         } else if (coinTypes == null || catPride == null || coinTypes.length != COINS_COUNT) {
             throw new IllegalStateException("Coin types and cat pride count must be " + COINS_COUNT);
         } else {
+            startTimeStamp = Instant.now().getEpochSecond();
             isInitialized = true;
             coinHolders = new CoinHolder[COINS_COUNT];
             for (int i = 0; i < coinTypes.length; ++i) {
@@ -72,6 +77,7 @@ public class DataService {
 
     public synchronized void decrementCoin(CoinType coinType, int count) throws NotEnoughMoneyException {
         currentCash = getCoinHolder(coinType).decrementAndReturnCurrentCash(currentCash, count);
+        if (maxCash < currentCash) maxCash = currentCash;
     }
 
     public synchronized int getCoinCount(CoinType coinType) {
@@ -120,6 +126,12 @@ public class DataService {
         return localInstance;
     }
 
+    public Statistics getStatistics() {
+        long current = Instant.now().getEpochSecond();
+        long fromStart = current - startTimeStamp;
+        return new Statistics(fromStart, current, currentCash);
+    }
+
     // -------------------------------------- inner types -----------------------------------------
 
     static class Cat {
@@ -139,7 +151,7 @@ public class DataService {
         }
 
         public Observable<Integer> getLifeCount() {
-            return getLifeCount.map(fullness -> ((int)(fullness + ONE_LIFE_FULLNESS) % ONE_LIFE_FULLNESS));
+            return getLifeCount.map(fullness -> ((int)(fullness + ONE_LIFE_FULLNESS) / ONE_LIFE_FULLNESS));
         }
 
         public synchronized void addFullness(double value) {
@@ -220,7 +232,7 @@ public class DataService {
     public enum CatPride {
 
         HARD(40),
-        MEDIUM(20),
+        MEDIUM(200),
         EASY(10);
 
         private double appetite;

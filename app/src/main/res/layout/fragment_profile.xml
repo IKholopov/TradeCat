@@ -4,47 +4,52 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/containerPager"
                 android:layout_width="match_parent"
-                android:background="@android:color/white"
                 android:layout_height="match_parent"
-                app:behavior_peekHeight="116dp"
-                android:elevation="8dp"
-                app:layout_behavior="@string/bottom_sheet_behavior"
-                tools:showIn="@layout/activity_main">
+    >
+
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/customRatingBar"
+        android:numStars="5"
+        android:indeterminateDrawable="@mipmap/ic_heart_full"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_alignTop="@+id/ivAvatar"
+        android:layout_alignParentStart="true"/>
 
     <ImageView
-        android:id="@+id/ivHeart0"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:src="@drawable/ic_heart"/>
-
-    <ImageView
-        android:id="@+id/ivHeart1"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivHeart2"
-        android:src="@drawable/ic_heart"/>
-
-    <ImageView
-        android:id="@+id/ivHeart2"
-        android:layout_width="42dp"
-        android:layout_height="42dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/ivHeart0"
-        android:src="@drawable/ic_heart"/>
-
-    <ImageView
+        android:id="@+id/ivAvatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_margin="16dp"
-        android:src="@mipmap/ic_launcher"
-        android:id="@+id/ivAvatar"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"/>
+        android:layout_margin="16dp"
+        android:src="@mipmap/ic_launcher"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view_history"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/ivAvatar"
+        android:paddingTop="16dp"/>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Сумма"
+        android:layout_alignTop="@+id/recycler_view_history"
+        android:layout_alignEnd="@+id/rating_bar"/>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="0dp"
+        android:text="Счёт"/>
 </RelativeLayout>
