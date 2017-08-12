@@ -240,6 +240,18 @@ public class DataService {
         EASY(10);
 
         private double appetite;
+        public static final int COUNT = 3;
+
+        public String getName() {
+            switch (this) {
+                case HARD:
+                    return "Hard";
+                case MEDIUM:
+                    return "Medium";
+                case EASY:
+                    return "Easy";
+            }
+        }
 
         CatPride(double appetite) {
             this.appetite = appetite;
@@ -259,6 +271,8 @@ public class DataService {
         RUR(1),
         GPY(10);
 
+        public final static int COUNT = 9;
+
         private final double initCost;
 
         CoinType(double initCost) {
@@ -267,6 +281,31 @@ public class DataService {
 
         public double getInitCost() {
             return initCost;
+        }
+
+        public String getName() {
+            switch (this) {
+                case BTC:
+                    return "BTC";
+                case ETH:
+                    return "ETH";
+                case ETC:
+                    return "ETC";
+                case LTC:
+                    return "LTC";
+                case Gold:
+                    return "Gold";
+                case Gasoline:
+                    return "Gasoline";
+                case USD:
+                    return "USD";
+                case RUR:
+                    return "RUR";
+                case GPY:
+                    return "GPY";
+                default:
+                    return "";
+            }
         }
 
     }
