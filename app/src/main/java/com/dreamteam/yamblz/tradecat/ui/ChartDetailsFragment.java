@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamteam.yamblz.tradecat.R;
 import com.dreamteam.yamblz.tradecat.data.DataService;
+import com.dreamteam.yamblz.tradecat.data.exception.NotEnoughMoneyException;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -32,7 +34,7 @@ import io.reactivex.disposables.CompositeDisposable;
 public class ChartDetailsFragment extends Fragment {
     public static final String TAG = "ChartDetailsFragment";
 
-    private final static int MAX_ENTRIES = 50;
+    private final static int MAX_ENTRIES = 200;
 
     @BindView(R.id.graphView) GraphView graph;
     @BindView(R.id.amountToTrade) EditText amountToTrade;
@@ -96,22 +98,42 @@ public class ChartDetailsFragment extends Fragment {
     }
 
     private void sell() {
+        try {
+            int toSell = Integer.valueOf(amountToTrade.getText().toString());
+            if(toSell < 0) {
+                throw new NumberFormatException();
+            }
+            DataService.getInstance().decrementCoin(coinType, toSell);
+        } catch (NumberFormatException e) {
+            Toast toast = Toast.makeText(getContext(), R.string.not_valid_cash, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NotEnoughMoneyException e) {
+            Toast toast = Toast.makeText(getContext(), R.string.not_enough_coins, Toast.LENGTH_SHORT);
+            toast.show();
+        }
         updateTextViews();
-        clearTrade();
     }
 
     private void buy() {
+        try {
+            int toBuy = Integer.valueOf(amountToTrade.getText().toString());
+            if(toBuy < 0) {
+                throw new NumberFormatException();
+            }
+            DataService.getInstance().incrementCoin(coinType, toBuy);
+        } catch (NumberFormatException e) {
+            Toast toast = Toast.makeText(getContext(), R.string.not_valid_cash, Toast.LENGTH_SHORT);
+            toast.show();
+        } catch (NotEnoughMoneyException e) {
+            Toast toast = Toast.makeText(getContext(), R.string.not_enough_cash, Toast.LENGTH_SHORT);
+            toast.show();
+        }
         updateTextViews();
-        clearTrade();
-    }
-
-    private void clearTrade() {
-        amountToTrade.setText("");
     }
 
     private void updateTextViews() {
-        //currentCoinView.setText(String.valueOf(DataService.getInstance().));
-        currentMoneyView.setText(String.valueOf(10));//insatnce));
+        currentCoinView.setText(String.valueOf(DataService.getInstance().getCoinCount(coinType)));
+        currentMoneyView.setText(String.valueOf(DataService.getInstance().getCurrentCash()));
         amountToTrade.setText(String.valueOf(0));
     }
 
