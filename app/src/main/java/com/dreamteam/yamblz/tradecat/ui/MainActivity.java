@@ -10,10 +10,7 @@ import android.widget.Button;
 
 import com.dreamteam.yamblz.tradecat.ui.adapters.CoinsAdapter;
 import com.dreamteam.yamblz.tradecat.ui.adapters.PrideAdapter;
-import com.dreamteam.yamblz.tradecat.ui.graphlist.GraphListFragment;
 import com.dreamteam.yamblz.tradecat.data.DataService;
-import com.dreamteam.yamblz.tradecat.data.DataService.CoinType;
-import com.dreamteam.yamblz.tradecat.data.DataService.CatPride;
 
 import com.dreamteam.yamblz.tradecat.R;
 

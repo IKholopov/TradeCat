@@ -28,6 +28,10 @@ public class GraphListFragment extends Fragment {
     @BindView(R.id.count2_textview) TextView count2;
     @BindView(R.id.count3_textview) TextView count3;
 
+    @BindView(R.id.coin_first) TextView coinFirst;
+    @BindView(R.id.coin_second) TextView coinSecond;
+    @BindView(R.id.coin_third) TextView coinThird;
+
     private LineGraphSeries<DataPoint> mSeries1;
     private LineGraphSeries<DataPoint> mSeries2;
     private LineGraphSeries<DataPoint> mSeries3;
@@ -112,6 +116,10 @@ public class GraphListFragment extends Fragment {
     }
 
     private void setUpButtons(View rootView) {
+        coinFirst.setText(coinTypes[0].getName());
+        coinSecond.setText(coinTypes[1].getName());
+        coinThird.setText(coinTypes[2].getName());
+
         (rootView.findViewById(R.id.arrow_up)).setOnClickListener(view -> {
             incrementAndHAndleException(coinTypes[0]);
             count1.setText(dataService.getCoinCount(coinTypes[0]) + "");
