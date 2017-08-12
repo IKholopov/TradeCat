@@ -158,6 +158,7 @@ public class DataService {
     static class CoinHolder {
 
         private final double D;
+        private final double lambda;
         private final Random random = new Random();
         private final CoinType coinType;
         private final Observable<Double> getCosts;
@@ -173,6 +174,7 @@ public class DataService {
             this.coinType = coinType;
             this.cost = coinType.initCost;
             this.D = cost / 100.0;
+            this.lambda = 5;
             this.getCosts = Observable.interval(1, TimeUnit.SECONDS)
                 .map(time -> onNextRandomChange());
         }
@@ -203,13 +205,27 @@ public class DataService {
             return currentCash - count * cost;
         }
 
+        private int getPoisson(double lambda) {
+            double L = Math.exp(-lambda);
+            double p = 1.0;
+            int k = 0;
+
+            do {
+                k++;
+                p *= random.nextDouble();
+            } while (p > L);
+
+            return k;
+        }
+
         private synchronized double onNextRandomChange() {
             currentDelta = random.nextGaussian();
-            double newCost = cost + currentDelta * D;
+            double newCost = cost + currentDelta * D * getPoisson(lambda);
             if (newCost < 0) {
                 currentDelta *= -0.1;
                 newCost = cost + currentDelta * D;
             }
+
             cost = newCost;
             return cost;
         }
