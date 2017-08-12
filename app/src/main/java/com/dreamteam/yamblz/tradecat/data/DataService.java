@@ -120,6 +120,10 @@ public class DataService {
         return localInstance;
     }
 
+    public synchronized static void removeInstance() {
+        dataService = null;
+    }
+
     // -------------------------------------- inner types -----------------------------------------
 
     static class Cat {
